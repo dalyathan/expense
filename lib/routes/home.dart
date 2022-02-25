@@ -24,30 +24,8 @@ class HomeRoute extends StatelessWidget {
         Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: size.width * horizontalPaddingRatio),
-            child: CustomAppBar(
-              height: appBarHeightRatio * size.height,
-              title: "Home",
-              width: size.width * (1 - 2 * horizontalPaddingRatio),
-            )),
-        largeSpacer,
-        Padding(
-            padding: EdgeInsets.only(left: size.width * horizontalPaddingRatio),
-            child: MyCardContainer(
-              height: size.height * myCardHeightRatio,
-            )),
-        largeSpacer,
-        Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: size.width * horizontalPaddingRatio * 1.5),
-            child: ActionsContainer(
-              height: size.height * actionsHeightRatio,
-            )),
-        largeSpacer,
-        Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: size.width * horizontalPaddingRatio),
             child: const LastTransactionsListContainer(
-              title: "Last transactions",
+              title: "Expenses",
             )),
       ],
     );

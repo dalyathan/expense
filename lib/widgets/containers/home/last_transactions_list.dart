@@ -18,7 +18,7 @@ class LastTransactionsListContainer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          width: size.width * 0.5,
+          width: size.width * 0.25,
           child: FittedBox(
             fit: BoxFit.fitWidth,
             child: Text(
@@ -33,7 +33,7 @@ class LastTransactionsListContainer extends StatelessWidget {
           transaction: Transaction(
               "https://i.scdn.co/image/ab6761610000e5ebcc9df7eebc944ee35038ccc5",
               "Tewodros Kassahun",
-              "Jun 22, 12:30 am",
+              "Jun 22, 2022",
               246.00),
         ),
         space,
@@ -42,14 +42,14 @@ class LastTransactionsListContainer extends StatelessWidget {
           transaction: Transaction(
               "https://newafricanmagazine.com/wordpress/wp-content/uploads/2018/03/abiy-ahmed.jpg",
               "Abiy Ahmed",
-              "Jun 17, 09:30 pm",
-              -676.00),
+              "Jun 17, 2022",
+              676.00),
         ),
         space,
         LastTransactionTabContainer(
           height: tabheight,
           transaction: Transaction("https://yageru.com/images/artists/a242.jpg",
-              "Meseret Mebrate", "Jun 17, 09:30 pm", -896.00),
+              "Meseret Mebrate", "Jun 17, 2022", 896.00),
         )
       ],
     );

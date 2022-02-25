@@ -25,11 +25,11 @@ class TotalBalanceContainer extends StatelessWidget {
               height: height * 0.1,
             ),
             SizedBox(
-                width: size.width * 0.3,
+                width: size.width * 0.7,
                 child: FittedBox(
                   fit: BoxFit.fitWidth,
                   child: Text(
-                    "\$3,228",
+                    "You have credited a total of \$3,228",
                     style: GoogleFonts.sora(
                       color: Colors.white,
                     ),
@@ -39,11 +39,11 @@ class TotalBalanceContainer extends StatelessWidget {
               height: height * 0.025,
             ),
             SizedBox(
-                width: size.width * 0.225,
+                width: size.width * 0.4,
                 child: FittedBox(
                   fit: BoxFit.fitWidth,
                   child: Text(
-                    "Total Balance",
+                    "\$1,200 due today",
                     style: GoogleFonts.sora(
                       color: Colors.white54,
                     ),

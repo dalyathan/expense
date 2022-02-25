@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../theme.dart';
-import '../../icons/home.dart';
 import '../../icons/overview.dart';
 import '../../icons/stats.dart';
-import 'custom_icon.dart';
 import 'default_bottom_navbar_icon.dart';
 import 'selected_bottom_navbar_icon.dart';
 
@@ -26,28 +23,21 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     double iconWidth = size.width * 0.06;
     return BottomNavigationBar(
       items: <BottomNavigationBarItem>[
-        getCustomItem(HomeIcon(
-          width: iconWidth,
+        getCustomItem(Icon(
+          Icons.person,
+          size: iconWidth * 1.5,
         )),
-        getCustomItem(StatsIcon(
-          width: iconWidth,
-        )),
-        BottomNavigationBarItem(
-            label: '',
-            icon: CustomIcon(
-              icon: Icon(
-                Icons.qr_code,
-                size: iconWidth * 2,
-              ),
-              size: iconWidth * 3,
-            )),
         getCustomItem(OverviewIcon(
           width: iconWidth,
         )),
         getCustomItem(Icon(
-          Icons.person,
+          Icons.payments_outlined,
           size: iconWidth * 1.5,
-        ))
+        )),
+        getCustomItem(Icon(
+          Icons.add_card_outlined,
+          size: iconWidth * 1.5,
+        )),
       ],
       currentIndex: widget.selectedIndex,
       onTap: widget.onItemTapped,

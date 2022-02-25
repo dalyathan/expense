@@ -15,19 +15,16 @@ class _MainScreenState extends State<MainScreen> {
   final PageStorageBucket _bucket = PageStorageBucket();
   static const List<Widget> _widgetOptions = <Widget>[
     HomeRoute(
-      key: PageStorageKey("HomeRoute0"),
-    ),
-    HomeRoute(
       key: PageStorageKey("HomeRoute1"),
-    ),
-    HomeRoute(
-      key: PageStorageKey("HomeRoute2"),
     ),
     OverviewRoute(
       key: PageStorageKey("OverviewRoute0"),
     ),
-    OverviewRoute(
-      key: PageStorageKey("OverviewRoute1"),
+    HomeRoute(
+      key: PageStorageKey("HomeRoute2"),
+    ),
+    HomeRoute(
+      key: PageStorageKey("HomeRoute2"),
     ),
   ];
 

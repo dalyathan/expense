@@ -23,11 +23,11 @@ class LoginFormHead extends StatelessWidget {
                   flex: 6,
                 ),
                 SizedBox(
-                  height: height * 0.5,
+                  height: height * 0.4,
                   child: FittedBox(
                     fit: BoxFit.fitHeight,
                     child: Text(
-                      "Your",
+                      "The Ultimate",
                       style: GoogleFonts.sora(
                           color: Colors.black,
                           fontSize: 25,
@@ -36,14 +36,14 @@ class LoginFormHead extends StatelessWidget {
                   ),
                 ),
                 const Spacer(
-                  flex: 1,
+                  flex: 6,
                 ),
                 SizedBox(
                   height: height * 0.5,
                   child: FittedBox(
                     fit: BoxFit.fitHeight,
                     child: Text(
-                      "Credit Card",
+                      "Expense App",
                       style: GoogleFonts.sora(
                           color: const Color.fromRGBO(73, 135, 185, 1),
                           fontSize: 25,

@@ -33,31 +33,11 @@ class OverviewRoute extends StatelessWidget {
           height: size.height * totalBalanceHeightRatio,
         ),
         spacer,
-        Row(
-          children: [
-            const Spacer(
-              flex: 5,
-            ),
-            TotalContainer(
-              amount: 4322,
-              width: size.width * incomeExpenseWidthRatio,
-            ),
-            const Spacer(),
-            TotalContainer(
-              amount: -322,
-              width: size.width * incomeExpenseWidthRatio,
-            ),
-            const Spacer(
-              flex: 5,
-            ),
-          ],
-        ),
-        spacer,
         Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: size.width * horizontalPaddingRatio),
             child: const LastTransactionsListContainer(
-              title: "Transactions",
+              title: "Debtors",
             )),
       ],
     );

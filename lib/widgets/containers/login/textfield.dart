@@ -6,12 +6,12 @@ class TextfieldContainer extends StatefulWidget {
   final double height;
   final double width;
   bool isPasswordField;
-  TextfieldContainer(
-      {Key? key,
-      required this.height,
-      required this.width,
-      this.isPasswordField = false})
-      : super(key: key);
+  TextfieldContainer({
+    Key? key,
+    required this.height,
+    required this.width,
+    this.isPasswordField = false,
+  }) : super(key: key);
 
   @override
   State<TextfieldContainer> createState() => _TextfieldContainerState();
@@ -56,9 +56,10 @@ class _TextfieldContainerState extends State<TextfieldContainer> {
                 style: TextStyle(fontSize: widget.height * 0.3),
                 obscureText: hideText,
                 decoration: InputDecoration(
+                  hintText: widget.isPasswordField ? 'Password' : 'Email',
                   contentPadding: EdgeInsets.only(
                     left: widget.width * 0.075,
-                    top: widget.width * 0.3,
+                    top: widget.height * 0.1,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadius),
