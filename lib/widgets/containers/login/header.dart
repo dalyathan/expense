@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginFormHead extends StatelessWidget {
+class FormHeader extends StatelessWidget {
   final double height;
-  const LoginFormHead({Key? key, required this.height}) : super(key: key);
+  const FormHeader({Key? key, required this.height}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

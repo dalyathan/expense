@@ -1,4 +1,4 @@
-import 'package:credit_card/state/password.dart';
+import 'package:credit_card/state/login/password.dart';
 import 'package:credit_card/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../screen.dart';
-import '../../../state/email.dart';
+import '../../../state/login/email.dart';
 import 'button.dart';
 import 'textfield.dart';
 

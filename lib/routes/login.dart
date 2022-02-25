@@ -26,7 +26,7 @@ class LoginRoute extends StatelessWidget {
               height: size.height * largeSpacerRatio,
             ),
             Center(
-              child: LoginFormHead(
+              child: FormHeader(
                 height: size.height * titleheightRatio,
               ),
             ),

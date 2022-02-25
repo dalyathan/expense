@@ -1,9 +1,9 @@
-import 'package:credit_card/state/email.dart';
+import 'state/login/email.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'routes/login.dart';
-import 'state/password.dart';
+import 'state/login/password.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
