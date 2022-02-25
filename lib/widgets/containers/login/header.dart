@@ -17,44 +17,24 @@ class LoginFormHead extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                const Spacer(
-                  flex: 6,
+            const Spacer(
+              flex: 2,
+            ),
+            SizedBox(
+              height: height * 0.5,
+              child: FittedBox(
+                fit: BoxFit.fitHeight,
+                child: Text(
+                  "Expense App",
+                  style: GoogleFonts.sora(
+                      color: const Color.fromRGBO(73, 135, 185, 1),
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
-                  height: height * 0.4,
-                  child: FittedBox(
-                    fit: BoxFit.fitHeight,
-                    child: Text(
-                      "The Ultimate",
-                      style: GoogleFonts.sora(
-                          color: Colors.black,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                const Spacer(
-                  flex: 6,
-                ),
-                SizedBox(
-                  height: height * 0.5,
-                  child: FittedBox(
-                    fit: BoxFit.fitHeight,
-                    child: Text(
-                      "Expense App",
-                      style: GoogleFonts.sora(
-                          color: const Color.fromRGBO(73, 135, 185, 1),
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                const Spacer(
-                  flex: 6,
-                ),
-              ],
+              ),
+            ),
+            const Spacer(
+              flex: 6,
             ),
             SizedBox(
               height: height * 0.4,

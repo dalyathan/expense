@@ -36,15 +36,16 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: SingleChildScrollView(
-        child:
-            PageStorage(bucket: _bucket, child: _widgetOptions[_selectedIndex]),
-      )),
-      bottomNavigationBar: CustomBottomNavBar(
-        onItemTapped: _onItemTapped,
-        selectedIndex: _selectedIndex,
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: PageStorage(
+              bucket: _bucket, child: _widgetOptions[_selectedIndex]),
+        ),
+        bottomNavigationBar: CustomBottomNavBar(
+          onItemTapped: _onItemTapped,
+          selectedIndex: _selectedIndex,
+        ),
       ),
     );
   }

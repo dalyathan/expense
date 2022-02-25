@@ -5,13 +5,18 @@ import '../../../theme.dart';
 class TextfieldContainer extends StatefulWidget {
   final double height;
   final double width;
+  final Function(String) providerUpdater;
+  String? regexPattern;
+  String? matchFailedMessage;
   bool isPasswordField;
-  TextfieldContainer({
-    Key? key,
-    required this.height,
-    required this.width,
-    this.isPasswordField = false,
-  }) : super(key: key);
+  TextfieldContainer(
+      {Key? key,
+      required this.height,
+      required this.width,
+      required this.providerUpdater,
+      this.isPasswordField = false,
+      this.regexPattern})
+      : super(key: key);
 
   @override
   State<TextfieldContainer> createState() => _TextfieldContainerState();
@@ -29,57 +34,80 @@ class _TextfieldContainerState extends State<TextfieldContainer> {
   @override
   Widget build(BuildContext context) {
     double textfieldBorderRadiusRatio = 0.3;
-    double borderRadius = textfieldBorderRadiusRatio * widget.height;
+    double textfieldHeight = widget.height * 0.8;
+    double fieldBorderRadius = textfieldBorderRadiusRatio * textfieldHeight;
+    double containerBorderRadius = textfieldHeight * textfieldBorderRadiusRatio;
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
-        Center(
-          child: Container(
+        Container(
+          height: textfieldHeight,
+          width: widget.width,
+          decoration: ShapeDecoration(
+            gradient: const LinearGradient(
+              colors: [
+                Color.fromRGBO(230, 230, 230, 1),
+                Color.fromRGBO(240, 240, 240, 1)
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.0, 0.4],
+              tileMode: TileMode.clamp,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(containerBorderRadius)),
+            ),
+          ),
+          child: SizedBox(
             height: widget.height,
             width: widget.width,
-            decoration: ShapeDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Color.fromRGBO(230, 230, 230, 1),
-                  Color.fromRGBO(240, 240, 240, 1)
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0.0, 0.4],
-                tileMode: TileMode.clamp,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-              ),
-            ),
-            child: TextField(
-                style: TextStyle(fontSize: widget.height * 0.3),
-                obscureText: hideText,
-                decoration: InputDecoration(
+            child: TextFormField(
+              style: TextStyle(fontSize: widget.height * 0.3),
+              obscureText: hideText,
+              decoration: InputDecoration(
                   hintText: widget.isPasswordField ? 'Password' : 'Email',
                   contentPadding: EdgeInsets.only(
                     left: widget.width * 0.075,
-                    top: widget.height * 0.1,
                   ),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderRadius: BorderRadius.circular(fieldBorderRadius),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.transparent),
-                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderRadius: BorderRadius.circular(fieldBorderRadius),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.transparent),
-                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderRadius: BorderRadius.circular(fieldBorderRadius),
                   ),
-                )),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.transparent),
+                    borderRadius: BorderRadius.circular(fieldBorderRadius),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.transparent),
+                    borderRadius: BorderRadius.circular(fieldBorderRadius),
+                  )),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                if (widget.regexPattern != null &&
+                    RegExp(widget.regexPattern!).hasMatch(value) == false) {
+                  return widget.matchFailedMessage!;
+                }
+                widget.providerUpdater(value);
+                return null;
+              },
+            ),
           ),
         ),
-        widget.isPasswordField
-            ? Positioned(
-                top: widget.height * 0.3,
-                right: widget.width * 0.175,
-                child: InkResponse(
+        Positioned(
+          top: widget.height * 0.15,
+          right: widget.width * 0.05,
+          child: widget.isPasswordField
+              ? InkResponse(
                   radius: widget.height * 0.4,
                   onTap: () => setState(() {
                     hideText = hideText ? false : true;
@@ -89,9 +117,9 @@ class _TextfieldContainerState extends State<TextfieldContainer> {
                     color: MyTheme.darkBlue,
                     size: widget.height * 0.4,
                   ),
-                ),
-              )
-            : Container()
+                )
+              : Container(),
+        )
       ],
     );
   }

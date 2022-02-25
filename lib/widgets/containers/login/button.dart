@@ -1,12 +1,20 @@
 import 'package:credit_card/theme.dart';
 import 'package:flutter/material.dart';
 
-import '../../../screen.dart';
-
-class LoginButton extends StatelessWidget {
+class CustomButton extends StatelessWidget {
   final double width;
   final double height;
-  const LoginButton({Key? key, required this.width, required this.height})
+  final String description;
+  final VoidCallback onPressed;
+  final GlobalKey<FormState> formKey;
+
+  const CustomButton(
+      {Key? key,
+      required this.width,
+      required this.height,
+      required this.formKey,
+      required this.description,
+      required this.onPressed})
       : super(key: key);
 
   @override
@@ -40,11 +48,8 @@ class LoginButton extends StatelessWidget {
             ),
           ),
         ),
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const MainScreen()),
-        ),
-        child: const Text('Login'),
+        onPressed: onPressed,
+        child: Text(description),
       ),
     );
   }
