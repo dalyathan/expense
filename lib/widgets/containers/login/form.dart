@@ -1,7 +1,6 @@
 import 'package:credit_card/state/login/password.dart';
 import 'package:credit_card/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,8 +8,8 @@ import 'package:provider/provider.dart';
 
 import '../../../screen.dart';
 import '../../../state/login/email.dart';
-import 'button.dart';
-import 'textfield.dart';
+import '../common/button.dart';
+import '../common/textfield.dart';
 
 class LoginFormContainer extends StatefulWidget {
   final double height;
@@ -24,13 +23,13 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
   final _formKey = GlobalKey<FormState>();
   late Email emailProvider;
   late Password passwordProvider;
+  bool isLoading = false;
   bool invalidCredential = false;
 
   @override
   void initState() {
     super.initState();
     SchedulerBinding.instance!.addPostFrameCallback((_) async {
-      await Firebase.initializeApp();
       setState(() {
         emailProvider = Provider.of<Email>(context, listen: false);
         passwordProvider = Provider.of<Password>(context, listen: false);
@@ -54,7 +53,8 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
             TextfieldContainer(
               height: textfieldHeight,
               width: textfieldWidth,
-              providerUpdater: (value) => emailProvider.setUsername(value),
+              providerUpdater: (value) => emailProvider.setEmail(value),
+              hintText: 'Email',
             ),
             const Spacer(
               flex: 2,
@@ -64,6 +64,7 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
               width: textfieldWidth,
               isPasswordField: true,
               providerUpdater: (value) => passwordProvider.setPassword(value),
+              hintText: 'Password',
             ),
             const Spacer(
               flex: 1,
@@ -113,13 +114,17 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
             const Spacer(
               flex: 5,
             ),
-            CustomButton(
-              height: textfieldHeight * 0.9,
-              width: textfieldWidth,
-              formKey: _formKey,
-              description: 'Login',
-              onPressed: onLogin,
-            )
+            isLoading
+                ? const CircularProgressIndicator(
+                    color: MyTheme.darkBlue,
+                  )
+                : CustomButton(
+                    height: textfieldHeight * 0.9,
+                    width: textfieldWidth,
+                    formKey: _formKey,
+                    description: 'Login',
+                    onPressed: onLogin,
+                  )
           ],
         ),
       ),
@@ -131,6 +136,9 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
       var email = emailProvider.email;
       var password = passwordProvider.password;
       try {
+        setState(() {
+          isLoading = true;
+        });
         await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
         Navigator.push(
@@ -140,6 +148,7 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
       } on FirebaseAuthException catch (e) {
         setState(() {
           invalidCredential = true;
+          isLoading = false;
         });
       }
     }
