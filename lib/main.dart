@@ -1,13 +1,22 @@
+import 'package:credit_card/state/add_expense/amount.dart';
+import 'package:credit_card/state/add_expense/due.dart';
+import 'package:credit_card/state/add_expense/summary.dart';
+import 'package:credit_card/state/add_expense/to.dart';
 import 'package:credit_card/state/signup/first_name.dart';
 import 'package:credit_card/state/signup/last_name.dart';
+import 'package:credit_card/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
+import 'routes/signin.dart';
+import 'screen.dart';
+import 'state/common/user_credential.dart';
+import 'state/add_expense/title.dart';
 import 'state/login/email.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'routes/login.dart';
 import 'state/login/password.dart';
 
 void main() async {
@@ -16,6 +25,13 @@ void main() async {
     ListenableProvider<Email>(create: (_) => Email()),
     ListenableProvider<FirstName>(create: (_) => FirstName()),
     ListenableProvider<LastName>(create: (_) => LastName()),
+    ListenableProvider<UserCredentialProvider>(
+        create: (_) => UserCredentialProvider()),
+    ListenableProvider<AddExpenseTitle>(create: (_) => AddExpenseTitle()),
+    ListenableProvider<AddExpenseAmount>(create: (_) => AddExpenseAmount()),
+    ListenableProvider<AddExpenseSummary>(create: (_) => AddExpenseSummary()),
+    ListenableProvider<AddExpenseTo>(create: (_) => AddExpenseTo()),
+    ListenableProvider<AddDebtDue>(create: (_) => AddDebtDue()),
   ], child: const MyApp()));
 }
 
@@ -29,17 +45,48 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    SchedulerBinding.instance!.addPostFrameCallback((_) async {
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
       await Firebase.initializeApp();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: LoginRoute(),
-    );
+    GoogleSignInAccount? googleUser = GoogleSignIn().currentUser;
+    Widget nextScreen = const SafeArea(
+        child: Scaffold(
+            body: Center(
+      child: SizedBox(
+        width: 50,
+        height: 50,
+        child: CircularProgressIndicator(
+          color: MyTheme.darkBlue,
+        ),
+      ),
+    )));
+    return googleUser != null
+        ? FutureBuilder<GoogleSignInAuthentication>(
+            future: googleUser.authentication,
+            builder: (BuildContext context,
+                AsyncSnapshot<GoogleSignInAuthentication> snapshot) {
+              if (snapshot.hasData) {
+                final credential = GoogleAuthProvider.credential(
+                  accessToken: snapshot.data!.accessToken,
+                  idToken: snapshot.data!.idToken,
+                );
+                FirebaseAuth.instance
+                    .signInWithCredential(credential)
+                    .then((userCredential) {
+                  Provider.of<UserCredentialProvider>(context, listen: false)
+                      .setUserCredential(userCredential);
+                  nextScreen = const MainScreen();
+                });
+              } else if (snapshot.hasError) {
+                nextScreen = const SigninRoute();
+              }
+              return MaterialApp(home: nextScreen);
+            })
+        : const MaterialApp(home: SigninRoute());
   }
 }

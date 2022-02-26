@@ -1,10 +1,6 @@
-import 'package:credit_card/widgets/containers/common/app_bar.dart';
-import 'package:credit_card/widgets/containers/common/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/containers/home/actions.dart';
 import '../widgets/containers/home/last_transactions_list.dart';
-import '../widgets/containers/home/my_card.dart';
 
 class HomeRoute extends StatelessWidget {
   const HomeRoute({Key? key}) : super(key: key);

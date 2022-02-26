@@ -7,16 +7,19 @@ class TextfieldContainer extends StatefulWidget {
   final double width;
   final String hintText;
   final Function(String) providerUpdater;
+  bool isPasswordField;
+  bool isTextArea;
   String? regexPattern;
   String? matchFailedMessage;
-  bool isPasswordField;
+  String? initialValue;
   TextfieldContainer(
       {Key? key,
       required this.height,
       required this.width,
       required this.hintText,
-      this.isPasswordField = false,
       required this.providerUpdater,
+      this.isPasswordField = false,
+      this.isTextArea = false,
       this.regexPattern,
       this.matchFailedMessage})
       : super(key: key);
@@ -37,7 +40,8 @@ class _TextfieldContainerState extends State<TextfieldContainer> {
   @override
   Widget build(BuildContext context) {
     double textfieldBorderRadiusRatio = 0.3;
-    double textfieldHeight = widget.height * 0.8;
+    double textfieldHeight =
+        widget.isTextArea ? 2 * widget.height * 0.8 : widget.height * 0.8;
     double fieldBorderRadius = textfieldBorderRadiusRatio * textfieldHeight;
     double containerBorderRadius = textfieldHeight * textfieldBorderRadiusRatio;
     return Stack(
@@ -69,6 +73,8 @@ class _TextfieldContainerState extends State<TextfieldContainer> {
               style: TextStyle(fontSize: widget.height * 0.3),
               obscureText: hideText,
               onChanged: (value) => widget.providerUpdater(value),
+              maxLines: widget.isTextArea ? 10 : 1,
+              initialValue: widget.initialValue ?? '',
               decoration: InputDecoration(
                   hintText: widget.hintText,
                   contentPadding: EdgeInsets.only(

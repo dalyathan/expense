@@ -1,3 +1,4 @@
+import 'package:credit_card/routes/add_expense.dart';
 import 'package:credit_card/routes/home.dart';
 import 'package:flutter/material.dart';
 import 'routes/overview.dart';
@@ -23,8 +24,8 @@ class _MainScreenState extends State<MainScreen> {
     HomeRoute(
       key: PageStorageKey("HomeRoute2"),
     ),
-    HomeRoute(
-      key: PageStorageKey("HomeRoute2"),
+    AddExpenseRoute(
+      key: PageStorageKey("addExpenseRoute"),
     ),
   ];
 

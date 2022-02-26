@@ -23,7 +23,7 @@ class NoAccountContainer extends StatelessWidget {
               MaterialPageRoute(builder: (context) => const SignupRoute()),
             ),
             child: Text(
-              "create account",
+              "Signup",
               style: GoogleFonts.sora(
                   color: MyTheme.darkBlue,
                   fontSize: 17,
