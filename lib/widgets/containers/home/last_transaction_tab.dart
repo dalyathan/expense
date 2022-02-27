@@ -1,11 +1,9 @@
 import 'package:credit_card/models/expenses.dart';
 import 'package:credit_card/theme.dart';
-import 'package:credit_card/widgets/containers/common/button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
-import '../../../models/transactions.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 
 class LastTransactionTabContainer extends StatelessWidget {
   final double height;
@@ -17,7 +15,6 @@ class LastTransactionTabContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double iconDiameter = height * 0.75;
     DateTime? due = expenses.due;
     DateTime today = DateTime.now();
     bool isDebtDueToday = due != null &&
@@ -39,62 +36,87 @@ class LastTransactionTabContainer extends StatelessWidget {
     return SizedBox(
       height: height,
       child: ListTile(
-        leading: Column(children: [
-          Icon(
-            Icons.paid,
-            color: MyTheme.darkBlue,
-            size: height * 0.5,
-          ),
-          SizedBox(
-            height: height * 0.1,
-          ),
-          SizedBox(
-              width: size.width * 0.1,
-              child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Text("\$${expenses.amount}",
-                      style: GoogleFonts.sora(color: MyTheme.darkBlue))))
-        ]),
-        title: SizedBox(
-          width: size.width * 0.05,
-          child: FittedBox(
-            fit: BoxFit.fitWidth,
-            child: Text(expenses.to,
-                style: GoogleFonts.sora(color: MyTheme.darkBlue)),
+        leading: SizedBox(
+          width: size.width * 0.1,
+          child: Column(children: [
+            Icon(
+              Icons.paid,
+              color: MyTheme.darkBlue,
+              size: height * 0.5,
+            ),
+            SizedBox(
+              height: height * 0.1,
+            ),
+            SizedBox(
+                width: size.width * 0.1,
+                child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text("\$${expenses.amount}",
+                        style: GoogleFonts.sora(color: MyTheme.darkBlue))))
+          ]),
+        ),
+        title: Align(
+          alignment: Alignment(-1, 0),
+          child: SizedBox(
+            height: height * 0.5,
+            child: FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Text(expenses.to,
+                  style: GoogleFonts.sora(color: MyTheme.darkBlue)),
+            ),
           ),
         ),
-        subtitle:
-            Text(expenses.summary, style: GoogleFonts.sora(color: Colors.grey)),
+        subtitle: Align(
+            alignment: Alignment.topLeft,
+            child: Text(expenses.summary,
+                style: GoogleFonts.sora(color: Colors.grey))),
         isThreeLine: true,
         trailing: due != null
-            ? Column(children: [
-                Icon(
-                  Icons.calendar_today,
-                  color: iconColor,
-                  size: height * 0.345,
-                ),
-                SizedBox(
-                  height: height * 0.05,
-                ),
-                SizedBox(
-                    width: size.width * 0.175,
-                    child: FittedBox(
-                        fit: BoxFit.fitWidth,
-                        child: Text(
-                            "Due ${isDebtDueToday ? 'Today' : DateFormat('yyyy-MM-dd').format(due)}",
-                            style: GoogleFonts.sora(color: iconColor)))),
-                SizedBox(
-                  height: height * 0.05,
-                ),
-                SizedBox(
-                    width: size.width * 0.165,
-                    child: FittedBox(
-                        fit: BoxFit.fitWidth,
-                        child: Text("Send Reminder?",
-                            style: GoogleFonts.sora(color: iconColor)))),
-              ])
+            ? InkWell(
+                onTap: () => sendReminder(context, isDebtPastDueDate),
+                child: Column(children: [
+                  Icon(
+                    Icons.calendar_today,
+                    color: iconColor,
+                    size: height * 0.4,
+                  ),
+                  SizedBox(
+                    height: height * 0.1,
+                  ),
+                  SizedBox(
+                      width: size.width * 0.17,
+                      child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text(
+                              "${isDebtPastDueDate ? 'Was' : ''} due ${isDebtDueToday ? 'Today' : DateFormat('yyyy-MM-dd').format(due)}",
+                              style: GoogleFonts.sora(color: iconColor)))),
+                  SizedBox(
+                    height: height * 0.075,
+                  ),
+                  SizedBox(
+                      width: size.width * 0.15,
+                      child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text("Send Reminder?",
+                              style: GoogleFonts.sora(color: iconColor)))),
+                ]),
+              )
             : const SizedBox(),
       ),
     );
+  }
+
+  sendReminder(BuildContext context, bool isDebtPastDueDate) async {
+    if (expenses.contactInfo.isNotEmpty) {
+      await sendSMS(
+          message:
+              'hey ${expenses.to} how are you doing? just wanted let you know that your debt ${isDebtPastDueDate ? 'was' : 'is'} due ${DateFormat('yyyy-MM-dd').format(expenses.due!)}',
+          recipients: [expenses.contactInfo]);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: MyTheme.darkBlue,
+        content: Text('No contact info available', style: GoogleFonts.sora()),
+      ));
+    }
   }
 }

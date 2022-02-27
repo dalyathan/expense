@@ -18,6 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'state/login/password.dart';
+import 'state/total_expense/monthly.dart';
+import 'state/total_expense/weekly.dart';
 
 void main() async {
   runApp(MultiProvider(providers: [
@@ -32,6 +34,8 @@ void main() async {
     ListenableProvider<AddExpenseSummary>(create: (_) => AddExpenseSummary()),
     ListenableProvider<AddExpenseTo>(create: (_) => AddExpenseTo()),
     ListenableProvider<AddDebtDue>(create: (_) => AddDebtDue()),
+    ListenableProvider<WeeklyExpense>(create: (_) => WeeklyExpense()),
+    ListenableProvider<MonthlyExpense>(create: (_) => MonthlyExpense()),
   ], child: const MyApp()));
 }
 

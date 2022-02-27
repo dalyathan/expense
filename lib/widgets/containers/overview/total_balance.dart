@@ -1,6 +1,9 @@
+import 'package:credit_card/state/total_expense/monthly.dart';
+import 'package:credit_card/state/total_expense/weekly.dart';
 import 'package:credit_card/widgets/containers/common/blue_gradient_background.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import 'dollar.dart';
 
@@ -28,10 +31,12 @@ class TotalBalanceContainer extends StatelessWidget {
                 width: size.width * 0.7,
                 child: FittedBox(
                   fit: BoxFit.fitWidth,
-                  child: Text(
-                    "You have credited a total of \$3,228",
-                    style: GoogleFonts.sora(
-                      color: Colors.white,
+                  child: Consumer<MonthlyExpense>(
+                    builder: (_, value, __) => Text(
+                      "You have spent a total of \$${value.expense} this month and a total of",
+                      style: GoogleFonts.sora(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 )),
@@ -42,10 +47,12 @@ class TotalBalanceContainer extends StatelessWidget {
                 width: size.width * 0.4,
                 child: FittedBox(
                   fit: BoxFit.fitWidth,
-                  child: Text(
-                    "\$1,200 due today",
-                    style: GoogleFonts.sora(
-                      color: Colors.white54,
+                  child: Consumer<WeeklyExpense>(
+                    builder: (_, value, __) => Text(
+                      "and a total of ${value.expense} this week",
+                      style: GoogleFonts.sora(
+                        color: Colors.white54,
+                      ),
                     ),
                   ),
                 ))

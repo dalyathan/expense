@@ -40,19 +40,16 @@ class SigninRoute extends StatelessWidget {
               ),
             ),
           ),
-          const Spacer(),
+          const Spacer(
+            flex: 5,
+          ),
           Center(
             child: SigninOptions(
               width: size.width * 0.8,
             ),
           ),
           const Spacer(
-            flex: 2,
-          ),
-          Center(
-            child: NoAccountContainer(
-              height: size.height * 0.0765,
-            ),
+            flex: 4,
           ),
         ],
       )),

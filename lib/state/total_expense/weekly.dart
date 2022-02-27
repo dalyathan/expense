@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class WeeklyExpense extends ChangeNotifier {
-  late double expense;
+  double expense = 0.0;
 
   setExpense(double expense) {
     this.expense = expense;

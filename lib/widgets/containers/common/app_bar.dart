@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:credit_card/state/common/user_credential.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'blue_gradient_background.dart';
 import 'custom_icon.dart';
@@ -18,13 +21,19 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserCredentialProvider provider =
+        Provider.of<UserCredentialProvider>(context, listen: false);
+    String? imageUrl = provider.userCredential!.user!.photoURL;
+    double imageSize = height;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SizedBox(
-          height: height,
-          width: height,
-          child: Image.asset("assets/images/me.jpg"),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(imageSize * 0.5),
+          child: SizedBox(
+              width: imageSize,
+              height: imageSize,
+              child: CachedNetworkImage(imageUrl: imageUrl!)),
         ),
         SizedBox(
           height: height * 0.55,

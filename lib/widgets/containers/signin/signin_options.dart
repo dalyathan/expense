@@ -56,7 +56,7 @@ class _SigninOptionsState extends State<SigninOptions> {
                       Icon(
                         FontAwesomeIcons.google,
                         color: MyTheme.darkBlue,
-                        size: widget.width * 0.2,
+                        size: widget.width * 0.25,
                       ),
                       SizedBox(
                         height: size.height * 0.025,
@@ -64,38 +64,12 @@ class _SigninOptionsState extends State<SigninOptions> {
                       const Text(
                         "Signin with Google",
                         style: TextStyle(
-                            fontSize: 10,
-                            color: MyTheme.lightBlue,
+                            fontSize: 20,
+                            color: MyTheme.darkBlue,
                             fontWeight: FontWeight.bold),
                       )
                     ],
                   ),
-                ),
-                const Text(
-                  "Or",
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: MyTheme.darkBlue,
-                      fontWeight: FontWeight.bold),
-                ),
-                Column(
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.fingerprint,
-                      color: MyTheme.darkBlue,
-                      size: widget.width * 0.2,
-                    ),
-                    SizedBox(
-                      height: size.height * 0.025,
-                    ),
-                    const Text(
-                      "Scan your fingerprint",
-                      style: TextStyle(
-                          fontSize: 10,
-                          color: MyTheme.lightBlue,
-                          fontWeight: FontWeight.bold),
-                    )
-                  ],
                 ),
               ],
             ),
@@ -132,7 +106,7 @@ class _SigninOptionsState extends State<SigninOptions> {
       setState(() {
         isLoading = false;
       });
-      showErrorMessage('Unable to login');
+      showErrorMessage('Unable to Signin');
 
       rethrow;
     } on Exception catch (e) {
@@ -140,7 +114,7 @@ class _SigninOptionsState extends State<SigninOptions> {
         isLoading = false;
       });
       showErrorMessage(
-          'Unable to login. Please check your internet connection and try again.');
+          'Unable to Signin. Please check your internet connection and try again.');
       rethrow;
     }
   }

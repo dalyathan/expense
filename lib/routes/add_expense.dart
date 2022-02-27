@@ -252,6 +252,8 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
       setState(() {
         addingInProgress = false;
       });
+      addExpenseTo.setTo(null);
+      addDebtDue.setDate(null);
       showErrorMessage("Expense successfully added");
     });
   }
@@ -277,6 +279,8 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
         setState(() {
           addingInProgress = false;
         });
+        addExpenseTo.setTo(null);
+        addDebtDue.setDate(null);
         showErrorMessage("Debt successfully added");
       });
     }
@@ -288,22 +292,14 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
     }
     Contact payee = addExpenseTo.to!;
     String payeeInfo = '';
-    if (payee.emails != null && payee.emails!.isNotEmpty) {
-      for (Item item in payee.emails!) {
-        if (item.value != null) {
-          payeeInfo = item.value!;
-          break;
-        }
-      }
-    } else if (payee.phones != null && payee.phones!.isNotEmpty) {
+    if (payee.phones != null && payee.phones!.isNotEmpty) {
       for (Item item in payee.phones!) {
         if (item.value != null) {
-          payeeInfo = item.value!;
-          break;
+          return item.value!;
         }
       }
     }
-    return payeeInfo;
+    return '';
   }
 
   selectContact() async {

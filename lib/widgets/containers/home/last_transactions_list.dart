@@ -1,4 +1,3 @@
-import 'package:credit_card/models/transactions.dart';
 import 'package:credit_card/util/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,10 +14,11 @@ class LastTransactionsListContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double tabheight = size.height * 0.08;
-    SizedBox space = SizedBox(height: size.height * 0.025);
+    double tabheight = size.height * 0.075;
+    SizedBox space = SizedBox(height: size.height * 0.05);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
           width: size.width * 0.25,
@@ -30,22 +30,32 @@ class LastTransactionsListContainer extends StatelessWidget {
             ),
           ),
         ),
-        space,
         FutureBuilder<List<Expenses>>(
           future: DatabaseService.getExpenses(context),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Column(
-                children: snapshot.data!
-                    .map((expense) => Column(
-                          children: [
-                            LastTransactionTabContainer(
-                                height: tabheight, expenses: expense),
-                            space
-                          ],
-                        ))
-                    .toList(),
-              );
+              if (snapshot.data!.isNotEmpty) {
+                return Column(
+                  children: snapshot.data!
+                      .map((expense) => Column(
+                            children: [
+                              LastTransactionTabContainer(
+                                  height: tabheight, expenses: expense),
+                              space
+                            ],
+                          ))
+                      .toList(),
+                );
+              } else {
+                return Center(
+                  child: SizedBox(
+                    width: size.width * 0.2,
+                    child: const FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text("No records to display")),
+                  ),
+                );
+              }
             }
             return const SizedBox(
                 width: 50,
