@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
@@ -131,19 +132,23 @@ class _SigninOptionsState extends State<SigninOptions> {
       setState(() {
         isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Unable to login'),
-      ));
+      showErrorMessage('Unable to login');
+
       rethrow;
     } on Exception catch (e) {
       setState(() {
         isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text(
-            'Unable to login. Please check your internet connection and try again.'),
-      ));
+      showErrorMessage(
+          'Unable to login. Please check your internet connection and try again.');
       rethrow;
     }
+  }
+
+  showErrorMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: MyTheme.darkBlue,
+      content: Text(message, style: GoogleFonts.sora()),
+    ));
   }
 }

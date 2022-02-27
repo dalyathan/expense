@@ -23,19 +23,11 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     double iconWidth = size.width * 0.06;
     return BottomNavigationBar(
       items: <BottomNavigationBarItem>[
-        getCustomItem(Icon(
-          Icons.person,
-          size: iconWidth * 1.5,
-        )),
         getCustomItem(OverviewIcon(
           width: iconWidth,
         )),
         getCustomItem(Icon(
           Icons.payments_outlined,
-          size: iconWidth * 1.5,
-        )),
-        getCustomItem(Icon(
-          Icons.add_card_outlined,
           size: iconWidth * 1.5,
         )),
       ],

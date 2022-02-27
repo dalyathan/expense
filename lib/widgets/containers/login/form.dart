@@ -121,7 +121,6 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
                 : CustomButton(
                     height: textfieldHeight * 0.9,
                     width: textfieldWidth,
-                    formKey: _formKey,
                     description: 'Login',
                     onPressed: onLogin,
                   )

@@ -5,5 +5,6 @@ class FirstName extends ChangeNotifier {
 
   setFirstName(String firstName) {
     this.firstName = firstName;
+    notifyListeners();
   }
 }

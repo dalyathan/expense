@@ -3,18 +3,24 @@ import 'package:credit_card/state/add_expense/summary.dart';
 import 'package:credit_card/state/add_expense/title.dart';
 import 'package:credit_card/state/add_expense/to.dart';
 import 'package:credit_card/theme.dart';
+import 'package:credit_card/util/database_service.dart';
 import 'package:credit_card/widgets/containers/common/checkbox.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../state/add_expense/amount.dart';
 import '../widgets/containers/common/button.dart';
 import '../widgets/containers/common/textfield.dart';
 import '../widgets/containers/login/credit_card_3d.dart';
 import 'package:intl/intl.dart';
+
+import 'contacts_list.dart';
 
 class AddExpenseRoute extends StatefulWidget {
   const AddExpenseRoute({Key? key}) : super(key: key);
@@ -32,6 +38,7 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
   late AddExpenseTo addExpenseTo;
   late AddDebtDue addDebtDue;
   bool isDebt = false;
+  bool addingInProgress = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -43,7 +50,6 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
             Provider.of<AddExpenseAmount>(context, listen: false);
         addExpenseSummary =
             Provider.of<AddExpenseSummary>(context, listen: false);
-        addExpenseTo = Provider.of<AddExpenseTo>(context, listen: false);
       });
     });
   }
@@ -51,6 +57,7 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
   @override
   Widget build(BuildContext context) {
     addDebtDue = Provider.of<AddDebtDue>(context, listen: true);
+    addExpenseTo = Provider.of<AddExpenseTo>(context, listen: true);
     Size size = MediaQuery.of(context).size;
     double creditCard3dHeightRatio = 0.2;
     double titleheightRatio = 0.05;
@@ -132,11 +139,15 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
                             height: size.width * 0.05,
                             child: FittedBox(
                                 fit: BoxFit.fitHeight,
-                                child: Text(
-                                  addDebtDue.due ?? 'Select Due Date',
-                                  style: GoogleFonts.sora(
-                                      color: MyTheme.darkBlue,
-                                      decoration: TextDecoration.underline),
+                                child: Consumer<AddDebtDue>(
+                                  builder: (context, value, child) => Text(
+                                    value.due != null
+                                        ? 'due ${value.due}'
+                                        : 'Select Due Date',
+                                    style: GoogleFonts.sora(
+                                        color: MyTheme.darkBlue,
+                                        decoration: TextDecoration.underline),
+                                  ),
                                 ))),
                       )
                     : Container(),
@@ -164,27 +175,158 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
             SizedBox(
               height: size.height * smallSpacerRatio,
             ),
-            TextfieldContainer(
-                height: textfieldHeight,
-                width: textfieldWidth,
-                hintText: 'to',
-                providerUpdater: (to) => addExpenseTo.setTo(to)),
+            SizedBox(
+              width: textfieldWidth,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                      height: size.width * 0.05,
+                      child: FittedBox(
+                          fit: BoxFit.fitHeight,
+                          child: Consumer<AddExpenseTo>(
+                            builder: (_, to, __) => Text(
+                              to.to != null
+                                  ? 'Payed to ${to.to!.displayName}'
+                                  : 'Select Who you\'re Paying',
+                              style: GoogleFonts.sora(
+                                color: MyTheme.darkBlue,
+                              ),
+                            ),
+                          ))),
+                  CustomButton(
+                      width: textfieldWidth * 0.3,
+                      height: textfieldHeight * 0.6,
+                      description: 'Select',
+                      onPressed: selectContact),
+                ],
+              ),
+            ),
             SizedBox(
               height: size.height * smallSpacerRatio,
             ),
-            CustomButton(
-                width: textfieldWidth,
-                height: textfieldHeight * 0.9,
-                formKey: _formKey,
-                description: 'Add',
-                onPressed: addExpense)
+            addingInProgress
+                ? SizedBox(
+                    width: textfieldHeight * 0.9,
+                    height: textfieldHeight * 0.9,
+                    child: const CircularProgressIndicator(
+                        color: MyTheme.darkBlue))
+                : CustomButton(
+                    width: textfieldWidth,
+                    height: textfieldHeight * 0.9,
+                    description: 'Add',
+                    onPressed: insertToDb)
           ]),
         ),
       ],
     );
   }
 
-  addExpense() {
-    if (_formKey.currentState!.validate()) {}
+  insertToDb() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      showErrorMessage('Please connect to the internet and try again');
+    } else {
+      if (_formKey.currentState!.validate()) {
+        if (isDebt) {
+          insertDebt();
+        } else {
+          insertNormalExpense();
+        }
+      } else {}
+    }
+  }
+
+  insertNormalExpense() {
+    setState(() {
+      addingInProgress = true;
+    });
+    DatabaseService.addNormalExpense(
+            addTitleProvider.title,
+            addAmountProvider.amount,
+            addExpenseSummary.summary,
+            getContactInfo(),
+            context)
+        .then((value) {
+      setState(() {
+        addingInProgress = false;
+      });
+      showErrorMessage("Expense successfully added");
+    });
+  }
+
+  insertDebt() {
+    if (addDebtDue.due == null) {
+      showErrorMessage('Please select due date');
+    } else if (addExpenseTo.to == null) {
+      showErrorMessage('Please select who you\'re debting.');
+    } else {
+      setState(() {
+        addingInProgress = true;
+      });
+      DatabaseService.addDebt(
+              getContactInfo(),
+              addDebtDue.due!,
+              addExpenseSummary.summary,
+              addAmountProvider.amount,
+              addTitleProvider.title,
+              context)
+          .then((value) {
+        setState(() {
+          addingInProgress = false;
+        });
+        showErrorMessage("Debt successfully added");
+      });
+    }
+  }
+
+  String getContactInfo() {
+    if (addExpenseTo.to == null) {
+      return '';
+    }
+    Contact payee = addExpenseTo.to!;
+    String payeeInfo = '';
+    if (payee.emails != null && payee.emails!.isNotEmpty) {
+      for (Item item in payee.emails!) {
+        if (item.value != null) {
+          payeeInfo = item.value!;
+          break;
+        }
+      }
+    } else if (payee.phones != null) {
+      for (Item item in payee.phones!) {
+        if (item.value != null) {
+          payeeInfo = item.value!;
+          break;
+        }
+      }
+    }
+    return payeeInfo;
+  }
+
+  selectContact() async {
+    var status = await Permission.contacts.status;
+    if (status.isDenied) {
+      if (await Permission.contacts.request().isGranted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ContactsList()),
+        );
+      } else {
+        showErrorMessage("Contacts Access Denied");
+      }
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ContactsList()),
+      );
+    }
+  }
+
+  showErrorMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: MyTheme.darkBlue,
+      content: Text(message, style: GoogleFonts.sora()),
+    ));
   }
 }

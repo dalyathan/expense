@@ -6,13 +6,11 @@ class CustomButton extends StatelessWidget {
   final double height;
   final String description;
   final VoidCallback onPressed;
-  final GlobalKey<FormState> formKey;
 
-  const CustomButton(
+  CustomButton(
       {Key? key,
       required this.width,
       required this.height,
-      required this.formKey,
       required this.description,
       required this.onPressed})
       : super(key: key);

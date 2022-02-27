@@ -143,7 +143,6 @@ class _SignupRouteState extends State<SignupRoute> {
                   CustomButton(
                       width: textfieldWidth,
                       height: textfieldHeight * 0.9,
-                      formKey: _formKey,
                       description: 'Signup',
                       onPressed: signup)
                 ],

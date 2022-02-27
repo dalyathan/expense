@@ -5,5 +5,6 @@ class AddExpenseTitle extends ChangeNotifier {
 
   setTitle(String title) {
     this.title = title;
+    notifyListeners();
   }
 }

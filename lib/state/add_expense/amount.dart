@@ -5,5 +5,6 @@ class AddExpenseAmount extends ChangeNotifier {
 
   setAmount(String amount) {
     this.amount = amount;
+    notifyListeners();
   }
 }

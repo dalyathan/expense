@@ -5,5 +5,6 @@ class AddExpenseSummary extends ChangeNotifier {
 
   setSummary(String summary) {
     this.summary = summary;
+    notifyListeners();
   }
 }

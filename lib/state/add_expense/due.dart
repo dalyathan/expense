@@ -5,5 +5,6 @@ class AddDebtDue extends ChangeNotifier {
 
   setDate(String due) {
     this.due = due;
+    notifyListeners();
   }
 }

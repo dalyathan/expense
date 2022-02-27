@@ -6,5 +6,6 @@ class UserCredentialProvider extends ChangeNotifier {
 
   setUserCredential(UserCredential userCredential) {
     this.userCredential = userCredential;
+    notifyListeners();
   }
 }

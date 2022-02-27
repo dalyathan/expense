@@ -1,9 +1,11 @@
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/foundation.dart';
 
 class AddExpenseTo extends ChangeNotifier {
-  late String to;
+  Contact? to;
 
-  setTo(String to) {
+  setTo(Contact to) {
     this.to = to;
+    notifyListeners();
   }
 }
