@@ -37,7 +37,7 @@ class OverviewRoute extends StatelessWidget {
             padding: EdgeInsets.symmetric(
                 horizontal: size.width * horizontalPaddingRatio),
             child: const LastTransactionsListContainer(
-              title: "Debtors",
+              title: "Expenses",
             )),
       ],
     );

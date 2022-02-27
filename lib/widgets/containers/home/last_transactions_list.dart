@@ -1,7 +1,10 @@
 import 'package:credit_card/models/transactions.dart';
+import 'package:credit_card/util/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../models/expenses.dart';
+import '../../../theme.dart';
 import 'last_transaction_tab.dart';
 
 class LastTransactionsListContainer extends StatelessWidget {
@@ -28,28 +31,27 @@ class LastTransactionsListContainer extends StatelessWidget {
           ),
         ),
         space,
-        LastTransactionTabContainer(
-          height: tabheight,
-          transaction: Transaction(
-              "https://i.scdn.co/image/ab6761610000e5ebcc9df7eebc944ee35038ccc5",
-              "Tewodros Kassahun",
-              "Jun 22, 2022",
-              246.00),
-        ),
-        space,
-        LastTransactionTabContainer(
-          height: tabheight,
-          transaction: Transaction(
-              "https://newafricanmagazine.com/wordpress/wp-content/uploads/2018/03/abiy-ahmed.jpg",
-              "Abiy Ahmed",
-              "Jun 17, 2022",
-              676.00),
-        ),
-        space,
-        LastTransactionTabContainer(
-          height: tabheight,
-          transaction: Transaction("https://yageru.com/images/artists/a242.jpg",
-              "Meseret Mebrate", "Jun 17, 2022", 896.00),
+        FutureBuilder<List<Expenses>>(
+          future: DatabaseService.getExpenses(context),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Column(
+                children: snapshot.data!
+                    .map((expense) => Column(
+                          children: [
+                            LastTransactionTabContainer(
+                                height: tabheight, expenses: expense),
+                            space
+                          ],
+                        ))
+                    .toList(),
+              );
+            }
+            return const SizedBox(
+                width: 50,
+                height: 50,
+                child: CircularProgressIndicator(color: MyTheme.darkBlue));
+          },
         )
       ],
     );

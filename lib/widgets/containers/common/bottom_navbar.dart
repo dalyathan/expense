@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../icons/overview.dart';
-import '../../icons/stats.dart';
 import 'default_bottom_navbar_icon.dart';
 import 'selected_bottom_navbar_icon.dart';
 

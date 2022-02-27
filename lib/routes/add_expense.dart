@@ -13,12 +13,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:intl/intl.dart';
 
 import '../state/add_expense/amount.dart';
 import '../widgets/containers/common/button.dart';
 import '../widgets/containers/common/textfield.dart';
 import '../widgets/containers/login/credit_card_3d.dart';
-import 'package:intl/intl.dart';
 
 import 'contacts_list.dart';
 
@@ -129,11 +129,9 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
                             showTitleActions: true,
                             minTime: DateTime.now(),
                             maxTime: DateTime(2100, 1, 1), onChanged: (date) {
-                          addDebtDue
-                              .setDate(DateFormat('yyyy-MM-dd').format(date));
+                          addDebtDue.setDate(date);
                         }, onConfirm: (date) {
-                          addDebtDue
-                              .setDate(DateFormat('yyyy-MM-dd').format(date));
+                          addDebtDue.setDate(date);
                         }, currentTime: DateTime.now(), locale: LocaleType.en),
                         child: SizedBox(
                             height: size.width * 0.05,
@@ -142,7 +140,7 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
                                 child: Consumer<AddDebtDue>(
                                   builder: (context, value, child) => Text(
                                     value.due != null
-                                        ? 'due ${value.due}'
+                                        ? 'due ${DateFormat('yyyy-MM-dd').format(value.due!)}'
                                         : 'Select Due Date',
                                     style: GoogleFonts.sora(
                                         color: MyTheme.darkBlue,
@@ -181,14 +179,15 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                      height: size.width * 0.05,
+                      height: textfieldWidth * 0.075,
+                      width: textfieldWidth * 0.6,
                       child: FittedBox(
-                          fit: BoxFit.fitHeight,
+                          fit: BoxFit.fill,
                           child: Consumer<AddExpenseTo>(
                             builder: (_, to, __) => Text(
                               to.to != null
                                   ? 'Payed to ${to.to!.displayName}'
-                                  : 'Select Who you\'re Paying',
+                                  : 'Select Who you\'re Paying ${isDebt ? '' : '(optional)'}',
                               style: GoogleFonts.sora(
                                 color: MyTheme.darkBlue,
                               ),
@@ -241,12 +240,14 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
     setState(() {
       addingInProgress = true;
     });
-    DatabaseService.addNormalExpense(
+    DatabaseService.addExpense(
             addTitleProvider.title,
             addAmountProvider.amount,
             addExpenseSummary.summary,
+            addExpenseTo.to != null ? addExpenseTo.to!.displayName! : '',
+            context,
             getContactInfo(),
-            context)
+            null)
         .then((value) {
       setState(() {
         addingInProgress = false;
@@ -264,14 +265,15 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
       setState(() {
         addingInProgress = true;
       });
-      DatabaseService.addDebt(
-              getContactInfo(),
-              addDebtDue.due!,
-              addExpenseSummary.summary,
-              addAmountProvider.amount,
-              addTitleProvider.title,
-              context)
-          .then((value) {
+      DatabaseService.addExpense(
+        addTitleProvider.title,
+        addAmountProvider.amount,
+        addExpenseSummary.summary,
+        addExpenseTo.to != null ? addExpenseTo.to!.displayName! : '',
+        context,
+        getContactInfo(),
+        addDebtDue.due!,
+      ).then((value) {
         setState(() {
           addingInProgress = false;
         });
@@ -293,7 +295,7 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
           break;
         }
       }
-    } else if (payee.phones != null) {
+    } else if (payee.phones != null && payee.phones!.isNotEmpty) {
       for (Item item in payee.phones!) {
         if (item.value != null) {
           payeeInfo = item.value!;

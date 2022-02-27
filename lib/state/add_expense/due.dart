@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 class AddDebtDue extends ChangeNotifier {
-  String? due;
+  DateTime? due;
 
-  setDate(String due) {
+  setDate(DateTime due) {
     this.due = due;
     notifyListeners();
   }
