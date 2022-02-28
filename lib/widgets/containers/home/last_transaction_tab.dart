@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_sms/flutter_sms.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class LastTransactionTabContainer extends StatelessWidget {
   final double height;
@@ -33,6 +34,8 @@ class LastTransactionTabContainer extends StatelessWidget {
     } else {
       iconColor = MyTheme.darkBlue;
     }
+    var f = NumberFormat("###,###.0#", "en_US");
+
     return SizedBox(
       height: height,
       child: ListTile(
@@ -51,25 +54,21 @@ class LastTransactionTabContainer extends StatelessWidget {
                 width: size.width * 0.1,
                 child: FittedBox(
                     fit: BoxFit.fitWidth,
-                    child: Text("\$${expenses.amount}",
+                    child: Text("\$${f.format(double.parse(expenses.amount))}",
                         style: GoogleFonts.sora(color: MyTheme.darkBlue))))
           ]),
         ),
         title: Align(
-          alignment: Alignment(-1, 0),
-          child: SizedBox(
-            height: height * 0.5,
-            child: FittedBox(
-              fit: BoxFit.fitHeight,
-              child: Text(expenses.to,
-                  style: GoogleFonts.sora(color: MyTheme.darkBlue)),
-            ),
-          ),
+          alignment: const Alignment(-1, 0),
+          child: AutoSizeText(
+              expenses.to.isNotEmpty ? expenses.to : expenses.title,
+              maxLines: 2,
+              style: GoogleFonts.sora(color: MyTheme.darkBlue)),
         ),
         subtitle: Align(
             alignment: Alignment.topLeft,
-            child: Text(expenses.summary,
-                style: GoogleFonts.sora(color: Colors.grey))),
+            child: AutoSizeText(expenses.summary,
+                maxLines: 2, style: GoogleFonts.sora(color: Colors.grey))),
         isThreeLine: true,
         trailing: due != null
             ? InkWell(

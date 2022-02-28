@@ -4,6 +4,7 @@ import 'package:credit_card/widgets/containers/common/blue_gradient_background.d
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import 'dollar.dart';
 
@@ -15,6 +16,7 @@ class TotalBalanceContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    var f = NumberFormat("###,###.0#", "en_US");
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -29,7 +31,7 @@ class TotalBalanceContainer extends StatelessWidget {
             ),
             Consumer<MonthlyExpense>(
               builder: (_, value, __) => Text(
-                "You have spent a total of \$${value.expense} this month",
+                "You have spent a total of \$${f.format(double.parse(value.expense.toStringAsFixed(2)))} this month",
                 style: GoogleFonts.sora(
                   color: Colors.white,
                 ),
@@ -40,7 +42,7 @@ class TotalBalanceContainer extends StatelessWidget {
             ),
             Consumer<WeeklyExpense>(
               builder: (_, value, __) => Text(
-                "and a total of ${value.expense} this week",
+                "and a total of \$${f.format(double.parse(value.expense.toStringAsFixed(2)))} this week",
                 style: GoogleFonts.sora(
                   color: Colors.white,
                 ),

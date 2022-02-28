@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../widgets/containers/common/app_bar.dart';
 import '../widgets/containers/home/last_transactions_list.dart';
-import '../widgets/containers/overview/total.dart';
 import '../widgets/containers/overview/total_balance.dart';
 
 class OverviewRoute extends StatelessWidget {
@@ -14,15 +13,16 @@ class OverviewRoute extends StatelessWidget {
     double appBarHeightRatio = 0.065;
     double horizontalPaddingRatio = 0.075;
     double totalBalanceHeightRatio = 0.4;
-    double incomeExpenseWidthRatio = 0.35;
     SizedBox spacer = SizedBox(
       height: size.height * 0.025,
     );
     return Column(
       children: [
         Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: size.width * horizontalPaddingRatio),
+            padding: EdgeInsets.only(
+                top: size.height * 0.025,
+                right: size.width * horizontalPaddingRatio,
+                left: size.width * horizontalPaddingRatio),
             child: CustomAppBar(
               height: appBarHeightRatio * size.height,
               title: "Overview",

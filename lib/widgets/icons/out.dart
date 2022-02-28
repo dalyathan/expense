@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class OutIcon extends StatelessWidget {
@@ -15,7 +16,7 @@ class OutIcon extends StatelessWidget {
         color: Color.fromRGBO(255, 109, 109, 1),
       ),
       child: Align(
-        alignment: Alignment(0, -0.75),
+        alignment: const Alignment(0, -0.75),
         child: Icon(FontAwesomeIcons.caretDown,
             size: height * 0.75, color: Colors.white),
       ),

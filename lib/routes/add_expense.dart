@@ -1,3 +1,4 @@
+import 'package:credit_card/routes/overview.dart';
 import 'package:credit_card/state/add_expense/due.dart';
 import 'package:credit_card/state/add_expense/summary.dart';
 import 'package:credit_card/state/add_expense/title.dart';
@@ -15,6 +16,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:intl/intl.dart';
 
+import '../screen.dart';
 import '../state/add_expense/amount.dart';
 import '../widgets/containers/common/button.dart';
 import '../widgets/containers/common/textfield.dart';
@@ -224,7 +226,7 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
   insertToDb() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      showErrorMessage('Please connect to the internet and try again');
+      showMessage('Please connect to the internet and try again');
     } else {
       if (_formKey.currentState!.validate()) {
         if (isDebt) {
@@ -254,15 +256,15 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
       });
       addExpenseTo.setTo(null);
       addDebtDue.setDate(null);
-      showErrorMessage("Expense successfully added");
+      showMessage("Expense successfully added", navigateBack: true);
     });
   }
 
   insertDebt() {
     if (addDebtDue.due == null) {
-      showErrorMessage('Please select due date');
+      showMessage('Please select due date');
     } else if (addExpenseTo.to == null) {
-      showErrorMessage('Please select who you\'re debting.');
+      showMessage('Please select who you\'re debting.');
     } else {
       setState(() {
         addingInProgress = true;
@@ -281,7 +283,7 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
         });
         addExpenseTo.setTo(null);
         addDebtDue.setDate(null);
-        showErrorMessage("Debt successfully added");
+        showMessage("Debt successfully added", navigateBack: true);
       });
     }
   }
@@ -311,7 +313,7 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
           MaterialPageRoute(builder: (context) => const ContactsList()),
         );
       } else {
-        showErrorMessage("Contacts Access Denied");
+        showMessage("Contacts Access Denied");
       }
     } else {
       Navigator.push(
@@ -321,10 +323,17 @@ class _AddExpenseRouteState extends State<AddExpenseRoute> {
     }
   }
 
-  showErrorMessage(String message) {
+  showMessage(String message, {navigateBack = false}) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: MyTheme.darkBlue,
       content: Text(message, style: GoogleFonts.sora()),
     ));
+    if (navigateBack) {
+      await Future.delayed(Duration(seconds: 1));
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const MainScreen()),
+      );
+    }
   }
 }
