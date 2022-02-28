@@ -1,6 +1,6 @@
 # Expense App
 
-Check out the mini-app [here](https://github.com/surafelMelese/expense/raw/master/expense.apk)
+Check out the mini-app [here](https://github.com/surafelMelese/expense/raw/master/expenses.apk)
 
 Or instead if you wish to clone the project and run it:
 
