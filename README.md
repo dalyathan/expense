@@ -1,6 +1,6 @@
 # Expense App
 
-Download the app [here](https://github.com/surafelMelese/expense/raw/master/expenses.apk)
+Get the app [here](https://github.com/surafelMelese/expense/raw/master/expenses.apk)
 
 Or instead if you wish to clone the project and run it:
 
