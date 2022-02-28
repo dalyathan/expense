@@ -57,40 +57,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    GoogleSignInAccount? googleUser = GoogleSignIn().currentUser;
-    Widget nextScreen = const SafeArea(
-        child: Scaffold(
-            body: Center(
-      child: SizedBox(
-        width: 50,
-        height: 50,
-        child: CircularProgressIndicator(
-          color: MyTheme.darkBlue,
-        ),
-      ),
-    )));
-    return googleUser != null
-        ? FutureBuilder<GoogleSignInAuthentication>(
-            future: googleUser.authentication,
-            builder: (BuildContext context,
-                AsyncSnapshot<GoogleSignInAuthentication> snapshot) {
-              if (snapshot.hasData) {
-                final credential = GoogleAuthProvider.credential(
-                  accessToken: snapshot.data!.accessToken,
-                  idToken: snapshot.data!.idToken,
-                );
-                FirebaseAuth.instance
-                    .signInWithCredential(credential)
-                    .then((userCredential) {
-                  Provider.of<UserCredentialProvider>(context, listen: false)
-                      .setUserCredential(userCredential);
-                  nextScreen = const MainScreen();
-                });
-              } else if (snapshot.hasError) {
-                nextScreen = const SigninRoute();
-              }
-              return MaterialApp(home: nextScreen);
-            })
-        : const MaterialApp(home: SigninRoute());
+    return const MaterialApp(home: SigninRoute());
   }
 }
