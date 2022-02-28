@@ -78,10 +78,10 @@ class LastTransactionTabContainer extends StatelessWidget {
                   Icon(
                     Icons.calendar_today,
                     color: iconColor,
-                    size: height * 0.4,
+                    size: height * 0.35,
                   ),
                   SizedBox(
-                    height: height * 0.1,
+                    height: height * 0.075,
                   ),
                   SizedBox(
                       width: size.width * 0.17,

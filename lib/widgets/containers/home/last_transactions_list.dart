@@ -20,13 +20,16 @@ class LastTransactionsListContainer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(
-          width: size.width * 0.25,
-          child: FittedBox(
-            fit: BoxFit.fitWidth,
-            child: Text(
-              title,
-              style: GoogleFonts.sora(fontWeight: FontWeight.bold),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: SizedBox(
+            width: size.width * 0.25,
+            child: FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Text(
+                title,
+                style: GoogleFonts.sora(fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ),
@@ -57,10 +60,22 @@ class LastTransactionsListContainer extends StatelessWidget {
                 );
               }
             }
-            return const SizedBox(
-                width: 50,
-                height: 50,
-                child: CircularProgressIndicator(color: MyTheme.darkBlue));
+            return SizedBox(
+              height: size.height * 0.35,
+              child: Column(
+                children: const [
+                  Spacer(),
+                  Center(
+                    child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child:
+                            CircularProgressIndicator(color: MyTheme.darkBlue)),
+                  ),
+                  Spacer()
+                ],
+              ),
+            );
           },
         )
       ],

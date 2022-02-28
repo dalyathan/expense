@@ -27,35 +27,25 @@ class TotalBalanceContainer extends StatelessWidget {
             SizedBox(
               height: height * 0.1,
             ),
-            SizedBox(
-                width: size.width * 0.7,
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Consumer<MonthlyExpense>(
-                    builder: (_, value, __) => Text(
-                      "You have spent a total of \$${value.expense} this month and a total of",
-                      style: GoogleFonts.sora(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                )),
+            Consumer<MonthlyExpense>(
+              builder: (_, value, __) => Text(
+                "You have spent a total of \$${value.expense} this month",
+                style: GoogleFonts.sora(
+                  color: Colors.white,
+                ),
+              ),
+            ),
             SizedBox(
               height: height * 0.025,
             ),
-            SizedBox(
-                width: size.width * 0.4,
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Consumer<WeeklyExpense>(
-                    builder: (_, value, __) => Text(
-                      "and a total of ${value.expense} this week",
-                      style: GoogleFonts.sora(
-                        color: Colors.white54,
-                      ),
-                    ),
-                  ),
-                ))
+            Consumer<WeeklyExpense>(
+              builder: (_, value, __) => Text(
+                "and a total of ${value.expense} this week",
+                style: GoogleFonts.sora(
+                  color: Colors.white,
+                ),
+              ),
+            )
           ],
         )
       ],
